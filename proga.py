@@ -164,12 +164,12 @@ def main():
         (-sigma+1)/((sigma+1)*(2*sigma+1))
     alpha_1_m1 = 1/(2*sigma + 1)*alpha_0_0 + (2*sigma - 2)/(2*sigma+1)
     second_ord_friedr_closest = Sceme("Second_order_approximation_friedr_closest",
-                         alpha_0_m1=alpha_0_m1, alpha_0_0=alpha_0_0,
-                         alpha_1_m1=alpha_1_m1, alpha_m1_0=alpha_m1_0)
+                                      alpha_0_m1=alpha_0_m1, alpha_0_0=alpha_0_0,
+                                      alpha_1_m1=alpha_1_m1, alpha_m1_0=alpha_m1_0)
 
     calculate_scheme(second_ord_friedr_closest, N, h, tau, time_steps)
 
-        # ----------2 порядок ещё 2 схемы------------------------------------
+    # ----------2 порядок ещё 2 схемы------------------------------------
     alpha_0_0 = 1.5
     alpha_0_m1 = alpha_0_0*(-sigma-1)/(sigma+1) + 2/(sigma+1)
     alpha_m1_0 = alpha_0_0*(-sigma-1)/((sigma+1)*(2*sigma+1)) + \
@@ -192,7 +192,6 @@ def main():
 
     calculate_scheme(second_ord_2, N, h, tau, time_steps)
 
-
     # ----------3 порядок ------------------------------------------------
     alpha_0_m1 = (2*sigma)/(sigma + 1)
     alpha_0_0 = -2*(sigma-1)/(sigma+1)
@@ -207,4 +206,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
