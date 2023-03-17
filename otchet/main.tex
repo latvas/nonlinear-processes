@@ -21,6 +21,8 @@
 %\usepackage[demo]{graphicx}
 \usepackage{caption}
 
+\usepackage{hyperref}
+
 \newcommand{\p}[1]{\mathbb{P}(#1)}
 \newcommand{\E}{\mathbb{E}}
 \newcommand{\D}{\mathbb{D}}
@@ -64,6 +66,7 @@ $$\alpha^{0}_{-1} - \text{ось x}, \,\,\,\, \alpha^{0}_{0} - \text{ось y}$$
 \end{equation*}
 
 \subsection{Область монотонности положительных по Фридрихсу $\alpha^\nu_\mu \geqslant 0$ схем}
+\label{subsec:1t}
 \begin{equation*}
  \begin{cases}
  	\alpha^{0}_{-1} \geqslant 0  \\  
@@ -74,18 +77,29 @@ $$\alpha^{0}_{-1} - \text{ось x}, \,\,\,\, \alpha^{0}_{0} - \text{ось y}$$
 \end{equation*}
 
 \subsection{Однопараметрическое множество схем 2-го порядка аппроксимации}
+\label{subsec:2t}
 $$\alpha^{0}_{-1} = \frac{-\sigma-1}{\sigma+1} \alpha^{0}_{0}+ \frac{2}{\sigma+1}$$
 
 \subsection{Единственная схема 3-го порядка аппроксимации}
+\label{subsec:3t}
 $$\alpha^{0}_{-1} = \frac{2\sigma}{\sigma + 1},\,\, 
   \alpha^{0}_{0} = \frac{2(\sigma - 1)}{\sigma + 1}, \,\,
   \alpha^{-1}_{0} = \frac{\sigma - 1}{2\sigma^2 + 3\sigma + 1},\,\,
   \alpha^{1}_{-1} = \frac{2\sigma(\sigma-1)}{(\sigma+1)(2\sigma + 1)}$$
 
 
-\subsection{Схема 2-го порядка аппроксимации наиболее близкая к множеству положительных по Фридрихсу схем}
+%\subsection{Схема 2-го порядка аппроксимации наиболее близкая к множеству положительных по Фридрихсу схем}
+
+\subsection{Аналитический вид схемы с минимальной «аппроксимационной вязкостью»}
+\label{subsec:4t}
+$$\alpha^{0}_{-1} = \sigma, \,\,\, \alpha^{0}_{0} = 1-\sigma$$
+
+\subsection{Наиболее близкая ко множеству положительных по Фридрихсу схем среди схем 2-го порядка аппроксимации}
+\label{subsec:5t}
+$$\alpha^{0}_{-1} = 0.55, \,\,\, \alpha^{0}_{0} = 1.05$$
 
 \subsection{Рисунок для заданного шаблона и числа Куранта}
+\label{subsec:6t}
 \begin{figure}[h!]
     \centering
     \includegraphics[width=17cm]{risunok.jpg}
@@ -96,13 +110,15 @@ $$\alpha^{0}_{-1} = \frac{2\sigma}{\sigma + 1},\,\,
 
 \section{Практическая часть}
 \subsection{Четыре вершины области монотонных схем первого порядка аппроксимации}
-\newpage
+\label{subsec:1p}
+
 \begin{figure}[h!]
     \centering
     \includegraphics[width=15cm]{../graphs/First_order_approximation_right_up.png}
     \caption{Схема: $u^{n+1}_{m} = 0 \cdot u^{n+1}_{m-1} + 0.25 \cdot u^{n}_{m-1} + 0.75 \cdot u^{n}_{m} + 0 \cdot u^{n-1}_{m}$}
     \label{fig:vac}
 \end{figure} 
+
 
 \begin{figure}[h!]
     \centering
@@ -118,6 +134,7 @@ $$\alpha^{0}_{-1} = \frac{2\sigma}{\sigma + 1},\,\,
     \label{fig:vac}
 \end{figure} 
 
+\newpage
 \begin{figure}[h!]
     \centering
     \includegraphics[width=15cm]{../graphs/First_order_approximation_left_down.png}
@@ -126,7 +143,8 @@ $$\alpha^{0}_{-1} = \frac{2\sigma}{\sigma + 1},\,\,
 \end{figure} 
 
 \newpage
-\subsection{Наименее осциллирующая на разрывных решениях схема 2-го порядка аппроксимации из (5т) (Наиболее близкая ко множеству положительных по Фридрихсу схем)}
+\subsection{Наименее осциллирующая на разрывных решениях схема 2-го порядка аппроксимации из \ref{subsec:5t} (Наиболее близкая ко множеству положительных по Фридрихсу схем)}
+\label{subsec:2p}
 \begin{figure}[h!]
     \centering
     \includegraphics[width=15cm]{../graphs/Second_order_approximation_friedr_closest.png}
@@ -134,7 +152,9 @@ $$\alpha^{0}_{-1} = \frac{2\sigma}{\sigma + 1},\,\,
     \label{fig:vac}
 \end{figure} 
 
-\subsection{Две схемы 2-го порядка аппроксимации, лежащие на прямой – однопараметрическом множестве схем 2-го порядка аппроксимации – по разные стороны от схемы из (5т)}
+\newpage
+\subsection{Две схемы 2-го порядка аппроксимации, лежащие на прямой – однопараметрическом множестве схем 2-го порядка аппроксимации – по разные стороны от схемы из \ref{subsec:5t}}
+\label{subsec:3p}
 \begin{figure}[h!]
     \centering
     \includegraphics[width=15cm]{../graphs/Second_order_approximation_1.png}
@@ -142,6 +162,7 @@ $$\alpha^{0}_{-1} = \frac{2\sigma}{\sigma + 1},\,\,
     \label{fig:vac}
 \end{figure} 
 
+\newpage
 \begin{figure}[h!]
     \centering
     \includegraphics[width=15cm]{../graphs/Second_order_approximation_2.png}
@@ -151,6 +172,7 @@ $$\alpha^{0}_{-1} = \frac{2\sigma}{\sigma + 1},\,\,
 
 \newpage
 \subsection{Схема 3-го порядка аппроксимации}
+\label{subsec:4p}
 \begin{figure}[h!]
     \centering
     \includegraphics[width=15cm]{../graphs/Third_order_approximation.png}
@@ -158,6 +180,57 @@ $$\alpha^{0}_{-1} = \frac{2\sigma}{\sigma + 1},\,\,
     \label{fig:vac}
 \end{figure}
 
+\newpage
+\subsection{Гибридная схема, полученная с использованием схем из пункта \ref{subsec:3p} и сеточно-характеристического критерия монотонности}
+\label{subsec:5p}
+Схемы, использованные здесь:
+$$u^{n+1}_{m} = 0 \cdot u^{n+1}_{m-1} + 0.1 \cdot u^{n}_{m-1} + 1.5 \cdot u^{n}_{m} + -0.6 \cdot u^{n-1}_{m}$$
+$$u^{n+1}_{m} = -0,6 \cdot u^{n+1}_{m-1} + 1 \cdot u^{n}_{m-1} + 0.6 \cdot u^{n}_{m} + 0 \cdot u^{n-1}_{m}$$
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=15cm]{../graphs/Second_order_approximation_1Second_order_approximation_2First_order_approximation_right_up.png}
+    \caption{Гибридная схема из \ref{subsec:5p} \\ }
+    \label{fig:vac}
+\end{figure}
+
+\newpage
+\subsection{Гибридные схемы, полученные с использованием одной из схем из пункта \ref{subsec:3p}, схемы из пункта \ref{subsec:4p} и сеточно-характеристического критерия монотонности}
+\label{subsec:6p}
+Схемы, использованные здесь:
+$$u^{n+1}_{m} = -0,2 \cdot u^{n+1}_{m-1} + 0.4 \cdot u^{n}_{m-1} + 1.2 \cdot u^{n}_{m} + -0.4 \cdot u^{n-1}_{m}$$
+$$u^{n+1}_{m} = 0 \cdot u^{n+1}_{m-1} + 0.1 \cdot u^{n}_{m-1} + 1.5 \cdot u^{n}_{m} + -0.6 \cdot u^{n-1}_{m}$$
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=15cm]{../graphs/Third_order_approximationSecond_order_approximation_1First_order_approximation_right_up.png}
+    \caption{Гибридная схема из \ref{subsec:6p} \\ }
+    \label{fig:vac}
+\end{figure}
+
+\newpage
+Схемы, использованные здесь:
+$$u^{n+1}_{m} = -0,2 \cdot u^{n+1}_{m-1} + 0.4 \cdot u^{n}_{m-1} + 1.2 \cdot u^{n}_{m} + -0.4 \cdot u^{n-1}_{m}$$
+$$u^{n+1}_{m} = -0,6 \cdot u^{n+1}_{m-1} + 1 \cdot u^{n}_{m-1} + 0.6 \cdot u^{n}_{m} + 0 \cdot u^{n-1}_{m}$$
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=15cm]{../graphs/Third_order_approximationSecond_order_approximation_2First_order_approximation_right_up.png}
+    \caption{Гибридная схема из \ref{subsec:6p}\\ }
+    \label{fig:vac}
+\end{figure}
+
+\newpage
+\subsection{Гибридная схема, полученной с одновременным использованием двух схем из пункта \ref{subsec:3p}, схемы из пункта \ref{subsec:4p} и сеточно-характеристического критерия монотонности}
+\label{subsec:7p}
+Схемы, использованные здесь:
+$$u^{n+1}_{m} = -0,2 \cdot u^{n+1}_{m-1} + 0.4 \cdot u^{n}_{m-1} + 1.2 \cdot u^{n}_{m} + -0.4 \cdot u^{n-1}_{m}$$
+$$u^{n+1}_{m} = 0 \cdot u^{n+1}_{m-1} + 0.1 \cdot u^{n}_{m-1} + 1.5 \cdot u^{n}_{m} + -0.6 \cdot u^{n-1}_{m}$$
+$$u^{n+1}_{m} = -0,6 \cdot u^{n+1}_{m-1} + 1 \cdot u^{n}_{m-1} + 0.6 \cdot u^{n}_{m} + 0 \cdot u^{n-1}_{m}$$
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=15cm]{../graphs/Third_order_approximationSecond_order_approximation_1Second_order_approximation_2First_order_approximation_right_up.png}
+    \caption{Гибридная схема из \ref{subsec:7p}\\ }
+    \label{fig:vac}
+\end{figure}
 
 
 

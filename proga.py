@@ -91,6 +91,52 @@ def calculate_scheme(scheme, N, h, tau, time_steps):
     # print(u)
 
 
+def calculate_hybrid_scheme(schemes, N, h, tau, time_steps):
+
+    u = np.zeros((3, N), dtype=np.double)
+    for i in range(N):
+        # задаём начальные условия, предполагая, что -1 и 0 слой одинаковые
+        u[0][i] = phi(h*i)
+        u[1][i] = u[0][i]
+
+    for n in range(1, time_steps):
+        for m in range(1, N):
+            for scheme in schemes:
+                weight = scheme.return_weights()
+                u[2][m] = weight[0]*u[2][m-1] + weight[1] * \
+                    u[1][m-1] + weight[2]*u[1][m] + weight[3]*u[0][m]
+                delta = u[1][m-1] - u[1][m]
+                if (delta < 0 and u[1][m-1] < u[2][m] < u[1][m]) or (delta > 0 and u[1][m-1] > u[2][m] > u[1][m]):
+                    break
+
+        u[[0, 1]] = u[[1, 0]]
+        u[[1, 2]] = u[[2, 1]]
+        u[2] = np.zeros(N)
+
+    # np.savetxt(scheme.name()+".csv", u, delimiter=",")
+
+    data_to_graph = np.zeros((3, N), dtype=np.double)
+
+    print("--------------Hybrid scheme----------------")
+    for scheme in schemes:
+        print(scheme.get_name(), weight)
+    print("-------------------------------------------")
+
+    for i in range(N):
+        data_to_graph[0][i] = i*h
+        data_to_graph[1][i] = phi(h*i)
+        data_to_graph[2][i] = u[1][i]
+
+    name = str()
+    for scheme in schemes:
+        name += scheme.get_name()
+
+    np.savetxt("graphs_data/"+name+"(graph).csv",
+               data_to_graph, delimiter=",")
+
+    plot_graph(data_to_graph, name)
+
+
 def main():
     sigma = 0.25
     N = 201
@@ -202,6 +248,20 @@ def main():
                       alpha_1_m1=alpha_1_m1, alpha_m1_0=alpha_m1_0)
 
     calculate_scheme(third_ord, N, h, tau, time_steps)
+
+    # ----------Считаем по гибридным схемам ------------------------------
+    #5п
+    scemes_list = (second_ord_1, second_ord_2, first_ord_right_up)
+    calculate_hybrid_scheme(scemes_list, N, h, tau, time_steps)
+    #6п
+    scemes_list = (third_ord, second_ord_1, first_ord_right_up)
+    calculate_hybrid_scheme(scemes_list, N, h, tau, time_steps)
+
+    scemes_list = (third_ord, second_ord_2, first_ord_right_up)
+    calculate_hybrid_scheme(scemes_list, N, h, tau, time_steps)
+    #7п
+    scemes_list = (third_ord, second_ord_1, second_ord_2, first_ord_right_up)
+    calculate_hybrid_scheme(scemes_list, N, h, tau, time_steps)
 
 
 if __name__ == '__main__':
