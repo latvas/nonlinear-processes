@@ -40,6 +40,10 @@ def plot_graph(data_to_graph, graph_name):
         X.append(data_to_graph[0][i])
         Y.append(data_to_graph[2][i])
         N.append("end")
+    for i in range(data_to_graph.shape[1]):
+        X.append(data_to_graph[0][i])
+        Y.append(data_to_graph[3][i])
+        N.append("end_analytycal")
 
     fig, ax = plt.subplots()
 
@@ -57,13 +61,38 @@ def plot_graph(data_to_graph, graph_name):
     # plt.show()
 
 
+def plot_difference_graph(data_to_graph, graph_name):
+    N = list()
+    X = list()
+    Y = list()
+
+    for i in range(data_to_graph.shape[1]):
+        X.append(data_to_graph[0][i])
+        Y.append(data_to_graph[3][i] - data_to_graph[2][i])
+        N.append("difference")
+
+    fig, ax = plt.subplots()
+
+    for n in set(N):
+        x1 = [i for i, j in zip(X, N) if j == n]
+        y1 = [i for i, j in zip(Y, N) if j == n]
+        ax.plot(x1, y1, label=n)
+
+    plt.xlabel('x')
+    plt.ylabel('f(x)')
+
+    plt.grid(visible=True)
+    plt.legend()
+    plt.savefig("graphs/difference_"+graph_name+".png", dpi=300)
+
+
 def calculate_scheme(scheme, N, h, tau, time_steps):
 
     u = np.zeros((3, N), dtype=np.double)
     for i in range(N):
         # задаём начальные условия, предполагая, что -1 и 0 слой одинаковые
         u[0][i] = phi(h*i)
-        u[1][i] = u[0][i]
+        u[1][i] = phi(h*i - tau)
     weight = scheme.return_weights()
     for n in range(1, time_steps):
         for m in range(1, N):
@@ -76,12 +105,13 @@ def calculate_scheme(scheme, N, h, tau, time_steps):
 
     # np.savetxt(scheme.name()+".csv", u, delimiter=",")
 
-    data_to_graph = np.zeros((3, N), dtype=np.double)
+    data_to_graph = np.zeros((4, N), dtype=np.double)
     print(scheme.get_name(), weight)
     for i in range(N):
         data_to_graph[0][i] = i*h
         data_to_graph[1][i] = phi(h*i)
         data_to_graph[2][i] = u[1][i]
+        data_to_graph[3][i] = phi(h*i - tau*time_steps)
 
     np.savetxt("graphs_data/"+scheme.get_name()+"(graph).csv",
                data_to_graph, delimiter=",")
@@ -97,7 +127,7 @@ def calculate_hybrid_scheme(schemes, N, h, tau, time_steps):
     for i in range(N):
         # задаём начальные условия, предполагая, что -1 и 0 слой одинаковые
         u[0][i] = phi(h*i)
-        u[1][i] = u[0][i]
+        u[1][i] = phi(h*i - tau)
 
     for n in range(1, time_steps):
         for m in range(1, N):
@@ -115,7 +145,7 @@ def calculate_hybrid_scheme(schemes, N, h, tau, time_steps):
 
     # np.savetxt(scheme.name()+".csv", u, delimiter=",")
 
-    data_to_graph = np.zeros((3, N), dtype=np.double)
+    data_to_graph = np.zeros((4, N), dtype=np.double)
 
     print("--------------Hybrid scheme----------------")
     for scheme in schemes:
@@ -126,6 +156,7 @@ def calculate_hybrid_scheme(schemes, N, h, tau, time_steps):
         data_to_graph[0][i] = i*h
         data_to_graph[1][i] = phi(h*i)
         data_to_graph[2][i] = u[1][i]
+        data_to_graph[3][i] = phi(h*i - tau*time_steps)
 
     name = str()
     for scheme in schemes:
@@ -135,6 +166,7 @@ def calculate_hybrid_scheme(schemes, N, h, tau, time_steps):
                data_to_graph, delimiter=",")
 
     plot_graph(data_to_graph, name)
+    plot_difference_graph(data_to_graph, name)
 
 
 def main():
@@ -227,7 +259,7 @@ def main():
 
     calculate_scheme(second_ord_1, N, h, tau, time_steps)
 
-    alpha_0_0 = 0.6
+    alpha_0_0 = 0.8
     alpha_0_m1 = alpha_0_0*(-sigma-1)/(sigma+1) + 2/(sigma+1)
     alpha_m1_0 = alpha_0_0*(-sigma-1)/((sigma+1)*(2*sigma+1)) + \
         (-sigma+1)/((sigma+1)*(2*sigma+1))
@@ -250,16 +282,16 @@ def main():
     calculate_scheme(third_ord, N, h, tau, time_steps)
 
     # ----------Считаем по гибридным схемам ------------------------------
-    #5п
+    # 5п
     scemes_list = (second_ord_1, second_ord_2, first_ord_right_up)
     calculate_hybrid_scheme(scemes_list, N, h, tau, time_steps)
-    #6п
+    # 6п
     scemes_list = (third_ord, second_ord_1, first_ord_right_up)
     calculate_hybrid_scheme(scemes_list, N, h, tau, time_steps)
 
     scemes_list = (third_ord, second_ord_2, first_ord_right_up)
     calculate_hybrid_scheme(scemes_list, N, h, tau, time_steps)
-    #7п
+    # 7п
     scemes_list = (third_ord, second_ord_1, second_ord_2, first_ord_right_up)
     calculate_hybrid_scheme(scemes_list, N, h, tau, time_steps)
 
