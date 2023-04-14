@@ -32,7 +32,6 @@ class Sceme:
         return self.name
 
 
-
 # Начальные условия
 def y_0(x):
     if x <= 0:
@@ -40,24 +39,27 @@ def y_0(x):
     else:
         return y_R
 
+
 def z_0(x):
     if x <= 0:
         return z_L
     else:
         return z_R
-    
+
+
 def u_0(x):
     if x <= 0:
         return u_L
     else:
         return u_R
-    
+
+
 def p_0(x):
     if x <= 0:
         return p_L
     else:
         return p_R
-    
+
 
 def translate(y, z):
     shape = y.shape
@@ -68,7 +70,6 @@ def translate(y, z):
         p[i] = rho_0*c_0*(y[i]-z[i])/2
     return u, p
 
-    
 
 def plot_graph(data_to_graph, graph_name):
     N = list()
@@ -129,19 +130,25 @@ def plot_difference_graph(data_to_graph, graph_name):
 def calculate_scheme(scheme, N, h, tau, time_steps, lam):
     y = np.zeros((3, N), dtype=np.double)
     z = np.zeros((3, N), dtype=np.double)
-    
+
     for i in range(N):
         # задаём начальные условия, предполагая, что -1 и 0 слой одинаковые
         y[0][i] = y_0(h*i-1)
         y[1][i] = y_0((h*i-1) - lam*tau)
         z[0][i] = z_0(h*i-1)
         z[1][i] = z_0((h*i-1) - lam*tau)
-    
+
+    y[2][0] = y_L
+    y[2][N-1] = y_R
+
+    z[2][0] = z_L
+    z[2][N-1] = z_R
+
     weight = scheme.return_weights()
     for n in range(1, time_steps):
         for m in range(1, N-1):
-            y[2][m] = weight[0]*y[2][m-1] + weight[1] * y[1][m-1] + weight[2]*y[1][m] + weight[3]*y[0][m]
-            
+            y[2][m] = weight[0]*y[2][m-1] + weight[1] * \
+                y[1][m-1] + weight[2]*y[1][m] + weight[3]*y[0][m]
 
         y[[0, 1]] = y[[1, 0]]
         y[[1, 2]] = y[[2, 1]]
@@ -151,14 +158,14 @@ def calculate_scheme(scheme, N, h, tau, time_steps, lam):
 
     for n in range(1, time_steps):
         for m in range(N-2, 0, -1):
-            z[2][m] = weight[0]*z[2][m+1] + weight[1] * z[1][m+1] + weight[2]*z[1][m] + weight[3]*z[0][m]
-        
+            z[2][m] = weight[0]*z[2][m+1] + weight[1] * \
+                z[1][m+1] + weight[2]*z[1][m] + weight[3]*z[0][m]
+
         z[[0, 1]] = z[[1, 0]]
         z[[1, 2]] = z[[2, 1]]
         z[2] = np.zeros(N)
         z[2][0] = z_L
         z[2][N-1] = z_R
-
 
     # np.savetxt(scheme.name()+".csv", u, delimiter=",")
     '''
@@ -198,7 +205,6 @@ def calculate_scheme(scheme, N, h, tau, time_steps, lam):
         data_to_graph[1][i] = u_0(h*i-1)
         data_to_graph[2][i] = u[i]
         data_to_graph[3][i] = u_0((h*i-1) - tau*time_steps)
-        
 
     np.savetxt("graphs_data/u_"+scheme.get_name()+"(graph).csv",
                data_to_graph, delimiter=",")
@@ -218,32 +224,35 @@ def calculate_scheme(scheme, N, h, tau, time_steps, lam):
 
     plot_graph(data_to_graph, "p_" + scheme.get_name())
 
-    
-
-
-
     # print(u)
+
 
 def calculate_hybrid_scheme(schemes, N, h, tau, time_steps, lam):
     y = np.zeros((3, N), dtype=np.double)
     z = np.zeros((3, N), dtype=np.double)
-    
+
     for i in range(N):
         # задаём начальные условия, предполагая, что -1 и 0 слой одинаковые
         y[0][i] = y_0(h*i-1)
         y[1][i] = y_0((h*i-1) - lam*tau)
         z[0][i] = z_0(h*i-1)
         z[1][i] = z_0((h*i-1) - lam*tau)
-    
+
+    y[2][0] = y_L
+    y[2][N-1] = y_R
+
+    z[2][0] = z_L
+    z[2][N-1] = z_R
+
     for n in range(1, time_steps):
         for m in range(1, N):
             for scheme in schemes:
                 weight = scheme.return_weights()
-                y[2][m] = weight[0]*y[2][m-1] + weight[1] * y[1][m-1] + weight[2]*y[1][m] + weight[3]*y[0][m]
+                y[2][m] = weight[0]*y[2][m-1] + weight[1] * \
+                    y[1][m-1] + weight[2]*y[1][m] + weight[3]*y[0][m]
                 delta = y[1][m-1] - y[1][m]
                 if (delta < 0 and y[1][m-1] < y[2][m] < y[1][m]) or (delta > 0 and y[1][m-1] > y[2][m] > y[1][m]):
                     break
-            
 
         y[[0, 1]] = y[[1, 0]]
         y[[1, 2]] = y[[2, 1]]
@@ -253,24 +262,24 @@ def calculate_hybrid_scheme(schemes, N, h, tau, time_steps, lam):
 
     for n in range(1, time_steps):
         for m in range(N-2, 0, -1):
-            z[2][m] = weight[0]*z[2][m+1] + weight[1] * z[1][m+1] + weight[2]*z[1][m] + weight[3]*z[0][m]
-        
+            z[2][m] = weight[0]*z[2][m+1] + weight[1] * \
+                z[1][m+1] + weight[2]*z[1][m] + weight[3]*z[0][m]
+
     for n in range(1, time_steps):
         for m in range(N-2, 0, -1):
             for scheme in schemes:
                 weight = scheme.return_weights()
-                z[2][m] = weight[0]*z[2][m+1] + weight[1] * z[1][m+1] + weight[2]*z[1][m] + weight[3]*z[0][m]
+                z[2][m] = weight[0]*z[2][m+1] + weight[1] * \
+                    z[1][m+1] + weight[2]*z[1][m] + weight[3]*z[0][m]
                 delta = z[1][m+1] - z[1][m]
                 if (delta < 0 and z[1][m+1] < z[2][m] < z[1][m]) or (delta > 0 and z[1][m+1] > z[2][m] > z[1][m]):
                     break
-
 
         z[[0, 1]] = z[[1, 0]]
         z[[1, 2]] = z[[2, 1]]
         z[2] = np.zeros(N)
         z[2][0] = z_L
         z[2][N-1] = z_R
-
 
     # np.savetxt(scheme.name()+".csv", u, delimiter=",")
     '''
@@ -339,59 +348,12 @@ def calculate_hybrid_scheme(schemes, N, h, tau, time_steps, lam):
     plot_graph(data_to_graph, "p_" + name)
 
 
-def calculate_hybrid_scheme_backup(schemes, N, h, tau, time_steps):
-
-    u = np.zeros((3, N), dtype=np.double)
-    for i in range(N):
-        # задаём начальные условия, предполагая, что -1 и 0 слой одинаковые
-        u[0][i] = phi(h*i)
-        u[1][i] = phi(h*i - tau)
-
-    for n in range(1, time_steps):
-        for m in range(1, N):
-            for scheme in schemes:
-                weight = scheme.return_weights()
-                u[2][m] = weight[0]*u[2][m-1] + weight[1] * u[1][m-1] + weight[2]*u[1][m] + weight[3]*u[0][m]
-                delta = u[1][m-1] - u[1][m]
-                if (delta < 0 and u[1][m-1] < u[2][m] < u[1][m]) or (delta > 0 and u[1][m-1] > u[2][m] > u[1][m]):
-                    break
-
-        u[[0, 1]] = u[[1, 0]]
-        u[[1, 2]] = u[[2, 1]]
-        u[2] = np.zeros(N)
-
-    # np.savetxt(scheme.name()+".csv", u, delimiter=",")
-
-    data_to_graph = np.zeros((4, N), dtype=np.double)
-
-    print("--------------Hybrid scheme----------------")
-    for scheme in schemes:
-        print(scheme.get_name(), weight)
-    print("-------------------------------------------")
-
-    for i in range(N):
-        data_to_graph[0][i] = i*h
-        data_to_graph[1][i] = phi(h*i)
-        data_to_graph[2][i] = u[1][i]
-        data_to_graph[3][i] = phi(h*i - tau*time_steps)
-
-    name = str()
-    for scheme in schemes:
-        name += scheme.get_name()
-
-    np.savetxt("graphs_data/"+name+"(graph).csv",
-               data_to_graph, delimiter=",")
-
-    plot_graph(data_to_graph, name)
-    plot_difference_graph(data_to_graph, name)
-
-
 def main():
     sigma = 0.25
     lam = c_0
     h = 0.01
     tau = sigma*h/lam
-    time_steps = 200
+    time_steps = 100
     N = 201
 
     print("distance = ", lam*tau*time_steps)
@@ -414,7 +376,7 @@ def main():
     first_ord_right_up = Sceme("First_order_approximation_right_up",
                                alpha_0_m1=alpha_0_m1, alpha_0_0=alpha_0_0,
                                alpha_1_m1=alpha_1_m1, alpha_m1_0=alpha_m1_0)
-    
+
     calculate_scheme(first_ord_right_up, N, h, tau, time_steps, lam)
 
     # ----------2 порядок по фридрихсу------------------------------------
